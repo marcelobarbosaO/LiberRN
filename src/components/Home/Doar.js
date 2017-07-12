@@ -13,7 +13,7 @@ class Vender extends Component {
     }
 
     _loadItemsDoar() {
-        let perf = JSON.parse(this.props.profile);
+        let perf = this.props.profile;
         axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 1 })
             .then((response) => {
                 //remove o load e insere os dados no state

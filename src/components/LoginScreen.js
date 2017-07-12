@@ -12,12 +12,14 @@ class LoginScreen extends Component {
         super(props);
 
         var _this = this;
+
+        /*
         AsyncStorage.getItem('profile', (err, result) => {
             if (result != null) {
                 _this.props.logarFace(JSON.stringify(result));
                 Actions.HomeScreen({ type: ActionConst.RESET });
             }
-        });
+        });*/
     }
 
     _loginFacebook() {
@@ -25,7 +27,8 @@ class LoginScreen extends Component {
         FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Native); // defaults to Native
         FBLoginManager.loginWithPermissions(["email", "user_friends", "public_profile"], function (error, data) {
             if (!error) {
-                self._loadImage(data.profile, data.credentials);
+                //alert(JSON.stringify(data.credentials));
+                self._loadImage(data.credentials);
             } else {
                 console.log("Error: ", error);
             }
@@ -36,25 +39,30 @@ class LoginScreen extends Component {
         var _this = this;
         axios.post('http://liberapp.com.br/api/validaUser', { email: perfil.email, id: perfil.userId, one_signal_id: '' })
             .then(function (response) {
+                //alert(JSON.stringify(response.data));
                 if (response.data.status == true) {
                     //esta cadastrado, entao joga pra index
                     let newData = { "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": response.data.user_pro, "logado": response.data.logado };
-                    _this._initDataToStorage(newData, perfil);
+                    _this._initDataToStorage(newData, perfil, false);
                 } else {
                     //cadastra o usuario no sistema
                     _this._cadastraUser(perfil);
                 }
             })
             .catch(function (error) {
+                alert(error);
                 Alert.alert("Houve um erro ao validar seu login! Tente mais tarde");
             });
     }
 
-    _initDataToStorage(newData, perfil) {
+    _initDataToStorage(newData, perfil, novo_usuario) {
         let perf = { "nome": perfil.nome, "email": perfil.email, "foto": perfil.foto, "userId": perfil.userId, "token": perfil.token, "server_response": newData };
         AsyncStorage.setItem("profile", JSON.stringify(perf));
         this.props.logarFace(perf);
-        Actions.HomeScreen({ type: ActionConst.RESET });
+        if(novo_usuario)
+            Actions.SlidesScreen({ type: ActionConst.RESET });//jogar pro slide de apresentacao
+        else
+            Actions.HomeScreen({ type: ActionConst.RESET });
     }
 
     _cadastraUser(perfil) {
@@ -63,7 +71,7 @@ class LoginScreen extends Component {
             .then(function (response) {
                 if (response.data.status == 0 || response.data.status == "0") {
                     let newData = { "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": false, "logado": true };
-                    _this._initDataToStorage(newData, perfil);
+                    _this._initDataToStorage(newData, perfil, true);
                 } else {
                     Alert.alert("Houve um erro ao lhe cadastrar no sistema. Tente mais tarde");
                 }
@@ -73,16 +81,20 @@ class LoginScreen extends Component {
             });
     }
 
-    _loadImage(profile, credentials) {
+    _loadImage(credentials) {
         var _this = this;
-        let dataP = JSON.parse(profile);
         var url = 'https://graph.facebook.com/v2.3/' + credentials.userId + '/picture?width=300&redirect=false&access_token=' + credentials.token;
-
-        fetch(url).then((response) => response.json())
+        var user = 'https://graph.facebook.com/v2.3/' + credentials.userId + '?fields=id,name,email,location,birthday&redirect=false&access_token=' + credentials.token;
+        
+        fetch(url).then((resp) => resp.json())
+        .then((respData) => {
+            fetch(user).then((response) => response.json())
             .then((responseData) => {
-                let perfil = { "nome": dataP.name, "email": dataP.email, "foto": responseData.data.url, "userId": credentials.userId, "token": credentials.token };
-                _this._validaLogin(perfil, credentials);//loga o usuario com o do BD ou cadastra
+                let perfil = { "nome": responseData.name, "email": responseData.email, "foto": respData.data.url, "userId": credentials.userId, "token": credentials.token };
+                _this._validaLogin(perfil);//loga o usuario com o do BD ou cadastra
             }).done();
+        }).done();
+
     }
 
     render() {
@@ -92,6 +104,8 @@ class LoginScreen extends Component {
 
                     <Image source={require('../imgs/logo_liber.png')} style={sty.logo} />
 
+                    <Text style={{backgroundColor:'transparent', marginBottom: 200, color:'#2B3845', fontSize: 16, textAlign:'center'}}>Leia, liberte-se</Text>
+
                     <TouchableHighlight style={sty.btn} onPress={() => this._loginFacebook()} underlayColor="#3B5998">
                         <Text style={sty.text}>Entrar com Facebook</Text>
                     </TouchableHighlight>
@@ -100,6 +114,13 @@ class LoginScreen extends Component {
             </Image>
         );
     };
+}
+
+const marg = '';
+if(Platform.OS === 'ios'){
+    marg = 30;
+} else {
+    marg = 0;
 }
 
 const sty = StyleSheet.create({
@@ -117,7 +138,7 @@ const sty = StyleSheet.create({
     logo: {
         width: null,
         height: 100,
-        marginBottom: 200,
+        marginHorizontal: marg,
         resizeMode: "center"
     },
     btn: {

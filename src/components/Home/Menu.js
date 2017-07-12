@@ -9,7 +9,7 @@ const userProfile = [];
 class Menu extends Component {
     constructor(props){
         super(props);
-        this.userProfile = JSON.parse(this.props.profile);
+        this.userProfile = this.props.profile;
     }
 
     render() {

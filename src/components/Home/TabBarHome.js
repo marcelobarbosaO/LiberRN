@@ -51,7 +51,7 @@ export default class TabBarHome extends Component {
 
 const estilo = StyleSheet.create({
     boxGeral: {
-        elevation: 4, backgroundColor: "#FFF"
+        elevation: 4, backgroundColor: "#000"
     },
     viewTopo: { flex: 2, paddingVertical: 10, justifyContent: "center" },
     logo: { width: null, height: 30, resizeMode: 'center' },

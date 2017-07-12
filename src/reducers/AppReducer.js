@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch(action.type){
         case LOGIN_FACE:
-            return {...state, profile: JSON.parse(action.perfil)};
+            return {...state, profile: action.perfil};
         default:
             return state;
     }
