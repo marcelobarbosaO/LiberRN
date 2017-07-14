@@ -4,35 +4,32 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import BoxAnuncioDoar from './BoxAnuncioDoar';
+import Loading from '../Outros/Loading';
+import ErrorNetwork from '../Outros/ErrorNetwork';
 
 class Vender extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: true, data: [] };
+        this.state = { loading: true, data: [], errorNetWork: false, errorNumber: 0 };
         this._loadItemsDoar();
+        this.reloadFuncaoDoar = this.reloadFuncaoDoar.bind(this);
     }
 
     _loadItemsDoar() {
-        let perf = this.props.profile;
+        let perf = JSON.parse(this.props.profile);
         axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 1 })
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || data.status == "0") {
-                    this.setState({ data: response.data.livros, loading: false });
+                    this.setState({ data: response.data.livros, loading: false, errorNetWork: false });
                 } else {
-                    Alert.alert(
-                        'Ops...',
-                        'Houve um erro na requisição. Tente mais tarde.'
-                    );
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 1 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
-                    Alert.alert("Você está sem conexão com a internet.");
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    Alert.alert(
-                        'Ops...',
-                        'Houve um erro, ao recuperar as clinicas. Tente novamente mais tarde.'
-                    );
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             });
     }
@@ -40,34 +37,42 @@ class Vender extends Component {
     _loadDoar() {
         if (this.state.loading) {
             return (
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <ActivityIndicator size="large" color="#10817F" />
-                    <Text>Carregando. Aguarde...</Text>
-                </View>
+                <Loading />
             )
         } else {
-            return (
-                <FlatList
-                    data={this.state.data}
-                    renderItem={
-                        (item) => <BoxAnuncioDoar key={item.id} id={item.id} {...item} />
-                    }
-                />
-            );
+            if (this.state.errorNetWork) {
+                return (
+                    <ErrorNetwork error={{ erro: this.state.errorNumber }} reloadFuncao={this.reloadFuncaoDoar} />
+                )
+            } else {
+                return (
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={
+                            (item) => <BoxAnuncioDoar key={item.id} id={item.id} {...item} />
+                        }
+                    />
+                );
+            }
         }
+    }
+
+    reloadFuncaoDoar() {
+        this.setState({ loading: true, errorNetWork: false, errorNumber: 0 });
+        this._loadItemsDoar();
     }
 
     render() {
         return (
-            <View style={sty.boxGeral}>
-                { this._loadDoar() }
+             <View style={[sty.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]}>
+                {this._loadDoar()}
             </View>
         );
     }
 };
 
 const sty = StyleSheet.create({
-    boxGeral: { flex: 1, backgroundColor: "#eee" }
+    boxGeral: { flex: 1 }
 })
 
 const mapStateToProps = state => ({

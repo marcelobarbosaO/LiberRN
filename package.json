@@ -20,6 +20,9 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0"
   },
+  "rnpm": {
+    "assets": ["./assets/fonts"]
+  },
   "devDependencies": {
     "babel-jest": "20.0.3",
     "babel-preset-es2015": "^6.24.1",

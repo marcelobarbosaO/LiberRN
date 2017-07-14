@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, AsyncStorage } from 'react-native';
 import Drawer from 'react-native-drawer';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
+import { connect } from 'react-redux';
 
 import TabBarHome from './Home/TabBarHome';
 import Vender from './Home/Vender';
@@ -10,8 +11,13 @@ import Trocar from './Home/Trocar';
 import Parceiros from './Home/Parceiros';
 
 import Menu from './Home/Menu';
+import { logarFace } from '../actions/AppActions';
 
 class HomeScreen extends Component {
+    constructor(props){
+        super(props);
+    }
+
     state = {
         index: 0,
         routes: [
@@ -63,9 +69,13 @@ const DrawerStyle = {
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 0
+        flex: 1
     }
 });
 
-export default HomeScreen
+//export default HomeScreen
+const mapStateToProps = state => ({
+    profile: state.AppReducer.profile
+});
+
+export default connect(mapStateToProps, { logarFace })(HomeScreen);

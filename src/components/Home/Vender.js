@@ -4,70 +4,92 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import BoxAnuncioVender from './BoxAnuncioVender';
+import Loading from '../Outros/Loading';
+import ErrorNetwork from '../Outros/ErrorNetwork';
 
 class Vender extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: true, data: [] };
-        this._loadItemsVenda();
+        this.state = { loading: true, data: [], errorNetWork: false, errorNumber: 0 };
+        if (this.props.profile.length > 0 && this.props.profile != []) {
+            this._loadItemsVenda();
+        } else {
+            this.checkUser();
+        }
+        this.reloadFuncaoVender = this.reloadFuncaoVender.bind(this);
+    }
+
+    checkUser() {
+        if (this.props.profile.length > 0 && this.props.profile != []) {
+            this._loadItemsVenda();
+        } else {
+            let self = this;
+            setTimeout(function () {
+                self.checkUser();
+            }, 300);
+        }
     }
 
     _loadItemsVenda() {
-        let perf = this.props.profile;
+        let perf = JSON.parse(this.props.profile);
         axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 3 })
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || data.status == "0") {
-                    this.setState({ data: response.data.livros, loading: false });
+                    this.setState({ data: response.data.livros, loading: false, errorNetWork: false });
                 } else {
-                    Alert.alert(
-                        'Ops...',
-                        'Houve um erro na requisição. Tente mais tarde.'
-                    );
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 1 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
-                    Alert.alert("Você está sem conexão com a internet.");
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    Alert.alert(
-                        'Ops...',
-                        'Houve um erro, ao recuperar as clinicas. Tente novamente mais tarde.'
-                    );
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             });
     }
 
+    reloadFuncaoVender(){
+        this.setState({ loading: true, errorNetWork: false, errorNumber: 0 });
+        this._loadItemsVenda();
+    }
+
+
+
     _loadVender() {
         if (this.state.loading) {
             return (
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <ActivityIndicator size="large" color="#10817F" />
-                    <Text>Carregando. Aguarde...</Text>
-                </View>
+                <Loading />
             )
         } else {
-            return (
-                <FlatList
-                    data={this.state.data}
-                    renderItem={
-                        (item) => <BoxAnuncioVender key={item.id} id={item.id} {...item} />
-                    }
-                />
-            );
+            if (this.state.errorNetWork) {
+                return(
+                    <ErrorNetwork error={{erro: this.state.errorNumber}} reloadFuncao={this.reloadFuncaoVender}/>
+                )
+            } else {
+                return (
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={
+                            (item) => <BoxAnuncioVender key={item.id} id={item.id} {...item} />
+                        }
+                    />
+                );
+            }
         }
     }
 
     render() {
         return (
-            <View style={sty.boxGeral}>
-                { this._loadVender() }
+            <View style={[sty.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]}>
+                {this._loadVender()}
             </View>
         );
     }
 };
 
 const sty = StyleSheet.create({
-    boxGeral: { flex: 1, backgroundColor: "#eee"}
+    boxGeral: { flex: 1 }
 })
 
 const mapStateToProps = state => ({
