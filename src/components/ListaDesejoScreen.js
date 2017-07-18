@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Drawer from 'react-native-drawer';
 
 import Menu from './Outros/Menu';
-import Index from './Perfil/Index';
+import Index from './ListaDesejo/Index';
 
-class PerfilScreen extends Component {
+class ListaDesejoScreen extends Component {
     constructor(props) {
         super(props);
     }
@@ -34,4 +34,4 @@ const DrawerStyle = {
     mainOverlay: { backgroundColor: "rgba(0,0,0,1)", opacity: 0 }
 }
 
-export default PerfilScreen;
+export default ListaDesejoScreen;

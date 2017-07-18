@@ -51,7 +51,7 @@ class Index extends Component {
                     this.setState({ loadData: true, errorNetwork: true });
                     Alert.alert(
                         'Ops...',
-                        'Houve um erro, ao recuperar as clinicas. Tente novamente mais tarde.'
+                        'Houve um erro, ao recuperar seus dados. Tente novamente mais tarde.'
                     );
                 }
             });

@@ -92,14 +92,14 @@ class Menu extends Component {
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => false} style={sty.btn} underlayColor="transparent">
+                            <TouchableHighlight onPress={() => Actions.MeusAnunciosScreen({type: ActionConst.RESET}) } style={sty.btn} underlayColor="transparent">
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: "center" }}>
                                     <Image source={require('../../imgs/icones/meus_anuncios.png')} style={sty.imgIcon} />
                                     <Text style={sty.itemText}>Meus Anúncios</Text>
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => false} style={sty.btn} underlayColor="transparent">
+                            <TouchableHighlight onPress={() => Actions.ListaDesejoScreen({type: ActionConst.RESET})} style={sty.btn} underlayColor="transparent">
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: "center" }}>
                                     <Image source={require('../../imgs/icones/lista_desejo.png')} style={sty.imgIcon} />
                                     <Text style={sty.itemText}>Lista de Desejo</Text>

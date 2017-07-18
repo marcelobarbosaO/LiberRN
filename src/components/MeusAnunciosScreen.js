@@ -4,16 +4,14 @@ import Drawer from 'react-native-drawer';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 
-import TabBarHome from './Home/TabBarHome';
-import Vender from './Home/Vender';
-import Doar from './Home/Doar';
-import Trocar from './Home/Trocar';
-import Parceiros from './Home/Parceiros';
+import TabBarHome from './MeusAnuncios/TabBarHome';
+import Vender from './MeusAnuncios/Vender';
+import Doar from './MeusAnuncios/Doar';
+import Trocar from './MeusAnuncios/Trocar';
 
 import Menu from './Outros/Menu';
-import { logarFace } from '../actions/AppActions';
 
-class HomeScreen extends Component {
+class MeusAnunciosScreen extends Component {
     constructor(props){
         super(props);
     }
@@ -23,8 +21,7 @@ class HomeScreen extends Component {
         routes: [
             { key: '1', title: 'Vender' },
             { key: '2', title: 'Trocar' },
-            { key: '3', title: 'Doar' },
-            { key: '4', title: 'Parceiros' },
+            { key: '3', title: 'Doar' }
         ],
     };
 
@@ -33,8 +30,7 @@ class HomeScreen extends Component {
     _renderScene = SceneMap({
         '1': Vender,
         '2': Trocar,
-        '3': Doar,
-        '4': Parceiros,
+        '3': Doar
     });
 
     render() {
@@ -78,4 +74,4 @@ const mapStateToProps = state => ({
     profile: state.AppReducer.profile
 });
 
-export default connect(mapStateToProps, { logarFace })(HomeScreen);
+export default connect(mapStateToProps, { })(MeusAnunciosScreen);
