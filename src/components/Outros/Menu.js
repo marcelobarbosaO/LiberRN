@@ -106,7 +106,7 @@ class Menu extends Component {
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => false} style={sty.btn} underlayColor="transparent">
+                            <TouchableHighlight onPress={() => Actions.MensagensScreen({type: ActionConst.RESET})} style={sty.btn} underlayColor="transparent">
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: "center" }} >
                                     <Image source={require('../../imgs/icones/mensagens.png')} style={sty.imgIcon} />
                                     <Text style={sty.itemText}>Mensagens</Text>

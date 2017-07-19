@@ -42,6 +42,12 @@ class ErrorNetwork extends Component {
                         </TouchableHighlight>
                     </View>
                 )
+            case 3:
+                return (
+                    <View style={est.boxTopo}>
+                        <Text>Nenhum registro encontrado.</Text>
+                    </View>
+                )
             default:
                 return (
                     <View style={est.boxTopo}>

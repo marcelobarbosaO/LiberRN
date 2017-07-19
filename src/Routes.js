@@ -7,6 +7,9 @@ import HomeScreen from './components/HomeScreen';
 import PerfilScreen from './components/PerfilScreen';
 import MeusAnunciosScreen from './components/MeusAnunciosScreen';
 import ListaDesejoScreen from './components/ListaDesejoScreen';
+import MensagensScreen from './components/MensagensScreen';
+import AnuncioScreen from './components/AnuncioScreen';
+import Chat from './components/Mensagens/Chat';
 import Slides from './components/SlidesApresentacao/Slides';
 import IconMenu from './components/Outros/IconMenu';
 
@@ -25,7 +28,10 @@ export default props => (
             <Scene key="PerfilScreen" title="Perfil" component={PerfilScreen} hideNavBar={true} />
             <Scene key="MeusAnunciosScreen" title="Meus Anúncios" component={MeusAnunciosScreen} hideNavBar={true} />
             <Scene key="ListaDesejoScreen" title="Lista de Desejo" component={ListaDesejoScreen} hideNavBar={true} />
+            <Scene key="MensagensScreen" title="Mensagens" component={MensagensScreen} hideNavBar={true} />
+            <Scene key="AnuncioScreen" title="Anuncio" component={AnuncioScreen} hideNavBar={true} />
 
+            <Scene key="ChatScreen" title="Chat" component={Chat} hideNavBar={true} />
             <Scene key="SlidesScreen" title="Bem Vindo" component={Slides} hideNavBar={true} />
         </Scene>
     </Router>

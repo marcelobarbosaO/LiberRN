@@ -19,7 +19,7 @@ export default class BoxDesejo extends Component {
                     <View style={{ flex: .3}}></View>
                     <View style={{ flex: 3, position:'relative'}}>
                         <Text style={ sty.titulo }>{ this.props.item.titulo }</Text>
-                        <Text style={[sty.data],{ color: (this.props.item.status == 'Indisponível') ? '#970909':'#387E14' }}>{ this.props.item.status }</Text>
+                        <Text style={[sty.data, { color: (this.props.item.status == 'Indisponível') ? '#970909':'#387E14' }]}>{ this.props.item.status }</Text>
                         <TouchableHighlight onPress={ () => this.props.deleteItem(this.props.item.id) } underlayColor="transparent" style={{ position: 'absolute', bottom: 0, right:0 }}>
                             <Image source={ require('../../imgs/icones/delete.png') } style={{ width: 25, height: 25}}/>
                         </TouchableHighlight>
