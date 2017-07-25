@@ -53,6 +53,7 @@
 		948753181F166D45005C1FBB /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948753151F166D45005C1FBB /* FBSDKLoginKit.framework */; };
 		948753191F166D45005C1FBB /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948753161F166D45005C1FBB /* FBSDKShareKit.framework */; };
 		9487533C1F1670BC005C1FBB /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9487533B1F1670A2005C1FBB /* libRCTFBLogin.a */; };
+		94888C5D1F20EE5000F8FD1F /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94888C3D1F20EE3500F8FD1F /* libART.a */; };
 		A56DEC1CF5A6431CA75BA5FE /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70ED738F656D4437BB1CC6CC /* OpenSans-ExtraBoldItalic.ttf */; };
 		BF0A8725B44749369054BD53 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2145F87B35E44F2A140F1AE /* OpenSans-LightItalic.ttf */; };
 		CA611AE917CC4A30AF836486 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C3030B3DD6E4817A86A5136 /* FontAwesome.ttf */; };
@@ -266,6 +267,20 @@
 			remoteGlobalIDString = 4F3A6B5B1ACFBCC500CA65F7;
 			remoteInfo = RCTFBLogin;
 		};
+		94888C3C1F20EE3500F8FD1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94888C371F20EE3500F8FD1F /* ART.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = ART;
+		};
+		94888C3E1F20EE3500F8FD1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94888C371F20EE3500F8FD1F /* ART.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 323A12871E5F266B004975B8;
+			remoteInfo = "ART-tvOS";
+		};
 		94C5B1091F164F0100E6A068 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -327,6 +342,7 @@
 		948753151F166D45005C1FBB /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		948753161F166D45005C1FBB /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		948753361F1670A2005C1FBB /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
+		94888C371F20EE3500F8FD1F /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		A87FC4CB186648B2B8AE4225 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-BoldItalic.ttf"; path = "../assets/fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		C2145F87B35E44F2A140F1AE /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-LightItalic.ttf"; path = "../assets/fonts/OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
 		C35F25D173FD412C8EB501DE /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -347,6 +363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94888C5D1F20EE5000F8FD1F /* libART.a in Frameworks */,
 				9487533C1F1670BC005C1FBB /* libRCTFBLogin.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				948753171F166D45005C1FBB /* FBSDKCoreKit.framework in Frameworks */,
@@ -519,6 +536,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				94888C371F20EE3500F8FD1F /* ART.xcodeproj */,
 				948753361F1670A2005C1FBB /* RCTFBLogin.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -592,6 +610,15 @@
 			isa = PBXGroup;
 			children = (
 				9487533B1F1670A2005C1FBB /* libRCTFBLogin.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		94888C381F20EE3500F8FD1F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94888C3D1F20EE3500F8FD1F /* libART.a */,
+				94888C3F1F20EE3500F8FD1F /* libART-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -737,6 +764,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 94888C381F20EE3500F8FD1F /* Products */;
+					ProjectRef = 94888C371F20EE3500F8FD1F /* ART.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
@@ -988,6 +1019,20 @@
 			fileType = archive.ar;
 			path = libRCTFBLogin.a;
 			remoteRef = 9487533A1F1670A2005C1FBB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94888C3D1F20EE3500F8FD1F /* libART.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libART.a;
+			remoteRef = 94888C3C1F20EE3500F8FD1F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94888C3F1F20EE3500F8FD1F /* libART-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libART-tvOS.a";
+			remoteRef = 94888C3E1F20EE3500F8FD1F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94C5B10A1F164F0100E6A068 /* libthird-party.a */ = {

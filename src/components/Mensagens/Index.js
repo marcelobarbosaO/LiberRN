@@ -74,7 +74,7 @@ class Index extends Component {
         axios.post('http://liberapp.com.br/api/remove_chat', { id: id })
             .then((response) => {
                 //remove o load e insere os dados no state
-                if (response.data.status == 0 || data.status == "0") {
+                if (response.data.status == 0 || response.data.status == "0") {
                     Actions.MensagensScreen({type: ActionConst.RESET});
                 } else {
                     Alert.alert('Houve um erro ao remover essa conversa.');
@@ -116,11 +116,11 @@ class Index extends Component {
         return(
             <View style={est.boxGeral}>
                 <View style={est.ToolBar}>
-                    <View style={{ flex: .7 }}>
-                        <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF">
+                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: .7 }}>
+                        <View style={{ flex: .7 }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
-                        </TouchableHighlight>
-                    </View>
+                        </View>
+                    </TouchableHighlight>
                     <View style={{ flex: 1, alignItems: "center" }}>
                         <Text style={{ fontSize: (Platform.OS == 'ios') ? 15 : 17, color: '#2B3845', fontWeight: 'bold' }}>Mensagens</Text>
                     </View>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, TouchableHighlight, Platform,AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
 import { Actions, ActionConst } from 'react-native-router-flux';
 
 
@@ -57,6 +58,7 @@ class Menu extends Component {
 
     _logOff(){
         AsyncStorage.removeItem('profile', (err) => {
+            FBLoginManager.logOut;// defaults to Native
             Actions.LoginScreen({ type: ActionConst.RESET});
         })
     }

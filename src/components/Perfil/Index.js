@@ -14,6 +14,7 @@ class Index extends Component {
         super(props);
         this.state = { loadData: false, dataProfile: [], errorNetwork: false };
         this.userProfile = JSON.parse(this.props.profile);
+        //alert(JSON.stringify(this.userProfile));
     }
 
     static contextTypes = { drawer: React.PropTypes.object }
@@ -35,7 +36,7 @@ class Index extends Component {
         axios.post('http://liberapp.com.br/api/dados_profile', { id: this.userProfile.server_response.server_id })
             .then((response) => {
                 //remove o load e insere os dados no state
-                if (response.data.status == 0 || data.status == "0") {
+                if (response.data.status == 0 || response.data.status == "0") {
                     this.setState({ loadData: true, dataProfile: response.data });
                 } else {
                     Alert.alert(
@@ -62,7 +63,7 @@ class Index extends Component {
             if (!this.state.errorNetwork) {
                 return (
                     <View style={est.boxBottom}>
-                        <TouchableHighlight onPress={() => Actions.HomeScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
+                        <TouchableHighlight onPress={() => Actions.MeusAnunciosScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: "center", position: 'relative' }}>
                                 <Image source={require('../../imgs/icones/meus_anuncios.png')} style={est.imgIcon} />
                                 <Text style={est.itemText}>Meus Anúncios</Text>
@@ -72,7 +73,7 @@ class Index extends Component {
                             </View>
                         </TouchableHighlight>
 
-                        <TouchableHighlight onPress={() => Actions.HomeScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
+                        <TouchableHighlight onPress={() => Actions.MensagensScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: "center", position: 'relative' }}>
                                 <Image source={require('../../imgs/icones/mensagens.png')} style={est.imgIcon} />
                                 <Text style={est.itemText}>Mensagens</Text>
@@ -82,7 +83,7 @@ class Index extends Component {
                             </View>
                         </TouchableHighlight>
 
-                        <TouchableHighlight onPress={() => Actions.HomeScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
+                        <TouchableHighlight onPress={() => Actions.ListaDesejoScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: "center", position: 'relative' }}>
                                 <Image source={require('../../imgs/icones/lista_desejo.png')} style={est.imgIcon} />
                                 <Text style={est.itemText}>Livros Desejados</Text>
@@ -92,7 +93,7 @@ class Index extends Component {
                             </View>
                         </TouchableHighlight>
 
-                        <TouchableHighlight onPress={() => Actions.HomeScreen({ type: ActionConst.RESET })} style={est.btn} underlayColor="transparent">
+                        <TouchableHighlight onPress={() => false } style={est.btn} underlayColor="transparent">
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: "center", position: 'relative' }}>
                                 <Image source={require('../../imgs/icones/views.png')} style={est.imgIcon} />
                                 <Text style={est.itemText}>Visualizações</Text>
@@ -124,11 +125,11 @@ class Index extends Component {
         return (
             <View style={est.boxGeral}>
                 <View style={est.ToolBar}>
-                    <View style={{ flex: 1 }}>
-                        <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF">
+                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: 1 }}>
+                        <View style={{ flex: 1 }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
-                        </TouchableHighlight>
-                    </View>
+                        </View>
+                    </TouchableHighlight>
                     <View style={{ flex: 1, alignItems: "center" }}>
                         <Text style={{ fontSize: (Platform.OS == 'ios') ? 15 : 17, color: '#2B3845', fontWeight: 'bold' }}>Perfil</Text>
                     </View>
@@ -142,7 +143,11 @@ class Index extends Component {
                             <View style={{ width: 150, height: 150, borderRadius: 100, borderWidth: 7, borderColor: "rgba(0,0,0,0.5)", overflow: 'hidden', padding: 0, margin: 0 }}>
                                 <Image source={{ uri: this.userProfile.foto, width: 150, height: 150 }} style={est.imgUser} />
                             </View>
-                            <Text style={est.nomeUser}>MARCELO BARBOSA</Text>
+                            <Text style={est.nomeUser}>{ this.userProfile.nome }</Text>
+                            <Text style={ est.nomeCidade }>{ (this.userProfile.server_response.server_cidade != "null") ? this.userProfile.server_response.server_cidade:''}</Text>
+                            <TouchableHighlight onPress={ () => false } style={{ position:'absolute', bottom: 5, right:5, backgroundColor:'#FFF', paddingVertical: 5, paddingHorizontal:9, borderRadius: 100}} underlayColor="transparent">
+                                <Icon style={{ backgroundColor:'transparent'}} name="md-create" size={25} color="#424B54"/>
+                            </TouchableHighlight>
                         </View>
                     </Image>
                     {this._loadBottomComponent()}
@@ -164,6 +169,7 @@ const est = StyleSheet.create({
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { paddingVertical: 25, alignItems: "center" },
     nomeUser: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 16 : 19, paddingTop: 10, fontFamily: 'OpenSans-ExtraBold' },
+    nomeCidade: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 14 : 16, paddingTop: 10, fontFamily: font },
     boxBottom: { marginVertical: 15, paddingHorizontal: 40, flex: 1, justifyContent: 'space-around' },
     imgIcon: { height: 35, width: 35, resizeMode: "center", marginRight: 20 },
     btn: { flex: 1 },

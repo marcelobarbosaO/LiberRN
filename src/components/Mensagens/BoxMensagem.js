@@ -6,12 +6,14 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 export default class BoxMensagem extends Component {
     constructor(props) {
         super(props);
+
+        this.livro = {chat_status: this.props.item.chat_status, usuario: this.props.item.user_nome, user_id: this.props.item.user_id, id: this.props.item.id_livro };
     }
 
     render() {
         return (
             <View style={sty.box}>
-                <TouchableHighlight onPress={() => Actions.ChatScreen({ item: this.props.item }) } style={sty.boxBg} underlayColor="transparent">
+                <TouchableHighlight onPress={() => Actions.ChatScreen({ item: this.livro }) } style={sty.boxBg} underlayColor="transparent">
                     <View style={sty.boxBg}>
                         <View style={{ flex: 1 }}>
                             <View style={{ position: 'absolute', borderRadius: 6, top: 0, left: 0, width: 72, height: 107, elevation: 6, padding: 0, margin: 0, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.5, shadowRadius: 2, position: 'relative' }}>

@@ -42,7 +42,7 @@ class LoginScreen extends Component {
             .then(function (response) {
                 if (response.data.status == true) {
                     //esta cadastrado, entao joga pra index
-                    let newData = { "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": response.data.user_pro, "logado": response.data.logado };
+                    let newData = {"server_cidade_id":response.data.cidade_id, "server_cidade":response.data.cidade, "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": response.data.user_pro, "logado": response.data.logado };
                     _this._initDataToStorage(newData, perfil, false);
                 } else {
                     //cadastra o usuario no sistema
@@ -69,7 +69,7 @@ class LoginScreen extends Component {
         axios.post('http://liberapp.com.br/api/cadUser', dados)
             .then(function (response) {
                 if (response.data.status == 0 || response.data.status == "0") {
-                    let newData = { "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": false, "logado": true };
+                    let newData = {"server_cidade_id":"null", "server_cidade":"null", "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": false, "logado": true };
                     _this._initDataToStorage(newData, perfil, true);
                 } else {
                     Alert.alert("Houve um erro ao lhe cadastrar no sistema. Tente mais tarde");

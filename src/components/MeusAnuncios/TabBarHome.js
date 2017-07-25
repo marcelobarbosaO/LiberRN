@@ -25,11 +25,11 @@ export default class TabBarHome extends Component {
                 <StatusBar backgroundColor="#000" />
 
                 <View style={{ flexDirection: 'row', backgroundColor:'#FFF', justifyContent: 'space-between', paddingHorizontal: 15 }}>
-                    <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
-                        <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF">
+                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
-                        </TouchableHighlight>
-                    </View>
+                        </View>
+                    </TouchableHighlight>
 
                     <View style={estilo.viewTopo}>
                         <Text style={{ fontSize: (Platform.OS == 'ios') ? 15 : 17, color: '#2B3845', fontWeight: 'bold' }}>Meus Anúncios</Text>

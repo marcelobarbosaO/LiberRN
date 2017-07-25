@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, Platform, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
 export default class BoxDesejo extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ export default class BoxDesejo extends Component {
                         <TouchableHighlight onPress={ () => this.props.deleteItem(this.props.item.id) } underlayColor="transparent" style={{ position: 'absolute', bottom: 0, right:0 }}>
                             <Image source={ require('../../imgs/icones/delete.png') } style={{ width: 25, height: 25}}/>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={ () => false } underlayColor="transparent" style={{position: 'absolute', bottom: 0, right:40}}>
+                        <TouchableHighlight onPress={ () => Actions.EditarDesejoScreen({ item: this.props.item}) } underlayColor="transparent" style={{position: 'absolute', bottom: 0, right:40}}>
                             <Image source={ require('../../imgs/icones/edit.png') } style={{ width: 25, height: 25 }}/>
                         </TouchableHighlight>
                     </View>

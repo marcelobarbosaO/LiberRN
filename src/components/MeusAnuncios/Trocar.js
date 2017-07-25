@@ -23,16 +23,16 @@ class Vender extends Component {
         axios.post('http://liberapp.com.br/api/meus_anuncios', { id: perf.server_response.server_id, filtro: 2 })
             .then((response) => {
                 //remove o load e insere os dados no state
-                if (response.data.status == 0 || data.status == "0") {
+                if (response.data.status == 0 || response.data.status == "0") {
                     this.setState({ data: response.data.lista, loading: false, errorNetWork: false });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 1 });
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
                     this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 0 });
                 }
             });
     }
@@ -83,7 +83,7 @@ class Vender extends Component {
         axios.post('http://liberapp.com.br/api/remove_livro', { id: id })
             .then((response) => {
                 //remove o load e insere os dados no state
-                if (response.data.status == 0 || data.status == "0") {
+                if (response.data.status == 0 || response.data.status == "0") {
                     Actions.MeusAnunciosScene({type: ActionConst.RESET});
                 } else {
                     Alert.alert('Houve um erro ao remover seu anúncio.');

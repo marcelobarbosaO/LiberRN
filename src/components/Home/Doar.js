@@ -20,16 +20,16 @@ class Vender extends Component {
         axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 1 })
             .then((response) => {
                 //remove o load e insere os dados no state
-                if (response.data.status == 0 || data.status == "0") {
+                if (response.data.status == 0 || response.data.status == "0") {
                     this.setState({ data: response.data.livros, loading: false, errorNetWork: false });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 1 });
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
                     this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
+                    this.setState({ loading: false, errorNetWork: true, errorNumber: 0 });
                 }
             });
     }

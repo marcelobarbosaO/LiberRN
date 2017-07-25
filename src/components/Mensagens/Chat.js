@@ -14,7 +14,7 @@ const userProfile = [];
 class Chat extends Component {
     constructor(props) {
         super(props);
-        let nom = this.props.item.user_nome.split(" ");
+        let nom = this.props.item.usuario.split(" ");
         let explode = nom[0];
         nome = explode;
         this.userProfile = JSON.parse(this.props.profile);
@@ -59,7 +59,7 @@ class Chat extends Component {
 
     _loadMsgs() {
         let self = this;
-        axios.post('http://liberapp.com.br/api/msgs_chat', { user_id: this.userProfile.server_response.server_id, id_livro: this.props.item.id_livro })
+        axios.post('http://liberapp.com.br/api/msgs_chat', { user_id: this.userProfile.server_response.server_id, id_livro: (this.props.item.id) })
             .then((response) => {
                 //remove o load e insere os dados no state
                 //alert(JSON.stringify(response));
@@ -71,13 +71,13 @@ class Chat extends Component {
                         }, 190);
                     }
                 } else if (response.data.status == 1 || response.data.status == "1") {
-                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 3 });
+                    this.setState({ loadData: true });
                 } else {
-                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 3 });
-                    Alert.alert(
+                    this.setState({ loadData: true });
+                    /*Alert.alert(
                         'Ops...',
                         'Houve um erro, ao recuperar suas mensagens. Tente novamente mais tarde.'
-                    );
+                    );*/
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
@@ -97,7 +97,7 @@ class Chat extends Component {
         if (this.state.text != '') {
             let tct = this.state.text;
             this.setState({ text: '' });
-            axios.post('http://liberapp.com.br/api/new_msg_chat', { user_id: this.userProfile.server_response.server_id, msg: tct, livro_id: this.props.item.id_livro, situacao: this.props.item.chat_status })
+            axios.post('http://liberapp.com.br/api/new_msg_chat', { user_id: this.userProfile.server_response.server_id, msg: tct, livro_id: this.props.item.id, situacao: this.props.item.chat_status })
                 .then((response) => {
                     if (response.data.status == 0 || response.data.status == "0") {
                         this.setState({ text: '' });
