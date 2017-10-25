@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, Platform, Image, Alert, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, Platform, Image, Alert, FlatList, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
@@ -14,7 +14,7 @@ const userProfile = [];
 class Index extends Component {
     constructor(props){
         super(props);
-        this.state = { loadData: false, lista: [], errorNetWork: false, errorNumber: 0 };
+        this.state = { refreshing:false, loadData: false, lista: [], errorNetWork: false, errorNumber: 0 };
         this.userProfile = JSON.parse(this.props.profile);
         this._loadLista();
 
@@ -31,19 +31,17 @@ class Index extends Component {
     _loadLista() {
         axios.post('http://liberapp.com.br/api/lista_desejo', { user_id: this.userProfile.server_response.server_id })
             .then((response) => {
-                //remove o load e insere os dados no state
-                //alert(JSON.stringify(response));
                 if (response.data.status == 0 || response.data.status == "0") {
-                    this.setState({ loadData: true, lista: response.data.lista });
+                    this.setState({ refreshing:false, loadData: true, lista: response.data.lista });
                 } else {
-                    this.setState({ loadData: true, errorNetWork: true, errorNumber: 3 });
+                    this.setState({ refreshing:false, loadData: true, errorNetWork: true, errorNumber: 3 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
-                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 2 });
+                    this.setState({ refreshing:false, loadData: true, errorNetwork: true, errorNumber: 2 });
                     Alert.alert("Você está sem conexão com a internet.");
                 } else {
-                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 0 });
+                    this.setState({ refreshing:false, loadData: true, errorNetwork: true, errorNumber: 0 });
                     Alert.alert(
                         'Ops...',
                         'Houve um erro, ao recuperar sua lista de desejo. Tente novamente mais tarde.'
@@ -70,7 +68,7 @@ class Index extends Component {
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {
-                    Actions.ListaDesejoScreen({type: ActionConst.RESET});
+                    this.reloadFuncaoDesejo();
                 } else {
                     Alert.alert('Houve um erro ao remover esse item.');
                 }
@@ -84,8 +82,13 @@ class Index extends Component {
     }
 
     reloadFuncaoDesejo(){
-        this.setState({ loadData: true, errorNetWork: false, errorNumber: 0 });
-        this._loadTela();
+        this.setState({ loadData: false, errorNetWork: false, errorNumber: 0 });
+        this._loadLista();
+    }
+
+    _onRefresh() {
+        this.setState({ refreshing: true, loadData: false, errorNetWork: false, errorNumber: 0});
+        this._loadLista();
     }
 
     _loadTela(){
@@ -99,6 +102,12 @@ class Index extends Component {
                     <FlatList
                             data={this.state.lista}
                             ItemSeparatorComponent={Separator}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                />
+                            }
                             renderItem={
                                 (item) => <BoxDesejo key={item.id} id={item.id} {...item} deleteItem={this.deleteItemDesejo}/>
                             }
@@ -117,7 +126,7 @@ class Index extends Component {
             <View style={[est.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]} >
                 <View style={est.ToolBar}>
                     <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: .7 }}>
-                        <View style={{ flex: .7 }}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>

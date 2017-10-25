@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableHighlight, StatusBar, Platform } from 'react-native';
 import { TabBar } from 'react-native-tab-view';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class TabBarHome extends Component {
@@ -9,14 +9,8 @@ export default class TabBarHome extends Component {
         super(props);
     }
 
-    static contextTypes = { drawer: React.PropTypes.object }
-
-    _openMenu() {
-        this.context.drawer.open();
-    }
-
-    _closeMenu() {
-        this.context.drawer.close();
+    _backHistory(){
+        Actions.pop();
     }
 
     render() {
@@ -25,21 +19,20 @@ export default class TabBarHome extends Component {
                 <StatusBar backgroundColor="#000" />
 
                 <View style={{ flexDirection: 'row', backgroundColor: '#FFF', justifyContent: 'space-between', paddingLeft: 15 }}>
-                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
+                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
                         <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
-                            <Icon name="md-menu" size={20} color="#2B3845" />
+                            <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>
 
                     <View style={estilo.viewTopo}>
-                        <Image source={require('../../imgs/logo_liber.png')} style={estilo.logo} />
+                        <Text style={{ fontSize: (Platform.OS == 'ios') ? 15 : 17, color: '#2B3845', fontWeight: 'bold' }}>
+                            Resultados da Busca
+                        </Text>
                     </View>
 
 
                     <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: "center" }}>
-                        <TouchableHighlight style={{ flex: 1, justifyContent:'center', paddingHorizontal:15}} onPress={() => this.props.btnSearch() } underlayColor="#FFF">
-                            <Icon name="md-search" size={20} color="#2B3845" />
-                        </TouchableHighlight>
                     </View>
                 </View>
 

@@ -102,6 +102,8 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        manifestPlaceholders = [onesignal_app_id: "ef9ae50b-3359-4835-a625-f43e48c4864d",
+                                onesignal_google_project_number: "773323694037"]
     }
     splits {
         abi {
@@ -133,6 +135,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-onesignal')
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-facebook-login')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])

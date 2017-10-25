@@ -11,13 +11,14 @@ class Trocar extends Component {
     constructor(props) {
         super(props);
         this.state = { refreshing:false, loading: true, data: [], errorNetWork: false, errorNumber: 0 };
+        
         this._loadItemsTrocar();
         this.reloadFuncaoTrocar = this.reloadFuncaoTrocar.bind(this);
     }
 
     _loadItemsTrocar() {
         let perf = JSON.parse(this.props.profile);
-        axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 2 })
+        axios.post('http://liberapp.com.br/api/busca', { id: perf.server_response.server_id, palavra: this.props.route.palavra, filtro: 2 })
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {

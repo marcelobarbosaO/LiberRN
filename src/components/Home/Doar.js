@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
@@ -7,10 +7,10 @@ import BoxAnuncioDoar from './BoxAnuncioDoar';
 import Loading from '../Outros/Loading';
 import ErrorNetwork from '../Outros/ErrorNetwork';
 
-class Vender extends Component {
+class Doar extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: true, data: [], errorNetWork: false, errorNumber: 0 };
+        this.state = { refreshing:false, loading: true, data: [], errorNetWork: false, errorNumber: 0 };
         this._loadItemsDoar();
         this.reloadFuncaoDoar = this.reloadFuncaoDoar.bind(this);
     }
@@ -21,15 +21,15 @@ class Vender extends Component {
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {
-                    this.setState({ data: response.data.livros, loading: false, errorNetWork: false });
+                    this.setState({ refreshing: false, data: response.data.livros, loading: false, errorNetWork: false });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 0 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 0 });
                 }
             });
     }
@@ -48,6 +48,12 @@ class Vender extends Component {
                 return (
                     <FlatList
                         data={this.state.data}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
                         renderItem={
                             (item) => <BoxAnuncioDoar key={item.id} id={item.id} {...item} />
                         }
@@ -58,7 +64,12 @@ class Vender extends Component {
     }
 
     reloadFuncaoDoar() {
-        this.setState({ loading: true, errorNetWork: false, errorNumber: 0 });
+        this.setState({ refreshing: true, loading: true, errorNetWork: false, errorNumber: 0 });
+        this._loadItemsDoar();
+    }
+
+    _onRefresh() {
+        this.setState({ refreshing: true, loading: true, errorNetWork: false, errorNumber: 0});
         this._loadItemsDoar();
     }
 
@@ -79,4 +90,4 @@ const mapStateToProps = state => ({
     profile: state.AppReducer.profile
 });
 
-export default connect(mapStateToProps, {})(Vender);
+export default connect(mapStateToProps, {})(Doar);

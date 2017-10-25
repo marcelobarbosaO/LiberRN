@@ -57,8 +57,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Escolha de Foto do Livro</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Usamos sua localização para filtros</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Escolha de Fotos do Livro</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

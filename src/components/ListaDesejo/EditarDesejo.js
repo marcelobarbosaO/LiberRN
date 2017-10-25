@@ -154,7 +154,7 @@ class EditarDesejo extends Component {
             <View style={[est.boxGeral]} >
                 <View style={est.ToolBar}>
                     <TouchableHighlight onPress={() => { Actions.ListaDesejoScreen({type: ActionConst.RESET}) }} underlayColor="#FFF" style={{ flex: .7 }}>
-                        <View style={{ flex: .7 }}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>

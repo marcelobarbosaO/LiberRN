@@ -65,7 +65,7 @@ class NovoDesejo extends Component {
                                 this.state.listaImages.map((item) => {
                                     return (
                                         <View style={{ width: (this.state.width / 3), marginTop: 10, alignItems: 'center' }} key={'tt-' + item.image.byteSize}>
-                                            <TouchableHighlight onPress={() => this._escolheImagem(item) }>
+                                            <TouchableHighlight onPress={() => this._escolheImagem(item) } >
                                                 <Image key={'image-' + item.image.byteSize} indicator={Progress.Circle} indicatorProps={{ showsText: true }} source={{ uri: item.link, width: 70, height: 110 }} style={[est.image, (this.state.imageKey == 'image-'+item.image.byteSize) ? est.borderActive:est.borderNotActive]} />
                                             </TouchableHighlight>
                                         </View>
@@ -156,7 +156,7 @@ class NovoDesejo extends Component {
             <View style={[est.boxGeral]} >
                 <View style={est.ToolBar}>
                     <TouchableHighlight onPress={() => { Actions.ListaDesejoScreen({type: ActionConst.RESET}) }} underlayColor="#FFF" style={{ flex: .7 }}>
-                        <View style={{ flex: .7 }}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>
@@ -195,7 +195,7 @@ const est = StyleSheet.create({
         position:'relative',
         zIndex:10
     },
-    borderActive:{ borderColor:'#f00',position:'relative', transform:[{scale: 1.2}], zIndex:99}
+    borderActive:{ borderColor:'#f00',position:'relative', transform:[{scale: 1.2}], zIndex:99},
 });
 
 const mapStateToProps = state => ({

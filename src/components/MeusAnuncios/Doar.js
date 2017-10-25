@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, FlatList, Alert, ActivityIndicator,TouchableHighlight } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, TouchableHighlight, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import BoxAnuncio from './BoxAnuncio';
@@ -12,7 +13,7 @@ import Separator from '../Outros/Separator';
 class Vender extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: true, data: [], errorNetWork: false, errorNumber: 0 };
+        this.state = { refreshing: false, loading: true, data: [], errorNetWork: false, errorNumber: 0 };
         this._loadItemsDoar();
         this.reloadFuncaoDoar = this.reloadFuncaoDoar.bind(this);
         this.deleteAnuncioDoar = this.deleteAnuncioDoar.bind(this);
@@ -24,15 +25,15 @@ class Vender extends Component {
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {
-                    this.setState({ data: response.data.lista, loading: false, errorNetWork: false });
+                    this.setState({ refreshing: false, data: response.data.lista, loading: false, errorNetWork: false });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 3 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 3 });
                 }
             }).catch((data) => {
                 if (data == 'Error: Network Error') {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 2 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 2 });
                 } else {
-                    this.setState({ loading: false, errorNetWork: true, errorNumber: 0 });
+                    this.setState({ refreshing: false, loading: false, errorNetWork: true, errorNumber: 0 });
                 }
             });
     }
@@ -55,7 +56,7 @@ class Vender extends Component {
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {
-                    Actions.MeusAnunciosScene({type: ActionConst.RESET});
+                    this.reloadFuncaoDoar();
                 } else {
                     Alert.alert('Houve um erro ao remover seu anúncio.');
                 }
@@ -82,6 +83,12 @@ class Vender extends Component {
                 return (
                     <FlatList
                         data={this.state.data}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
                         ItemSeparatorComponent={Separator}
                         renderItem={
                             (item) => <BoxAnuncio key={item.id} id={item.id} {...item} deleteAnuncio={this.deleteAnuncioDoar}/>
@@ -90,6 +97,11 @@ class Vender extends Component {
                 );
             }
         }
+    }
+
+    _onRefresh() {
+        this.setState({ refreshing: true, loading: true, errorNetWork: false, errorNumber: 0});
+        this._loadItemsDoar();
     }
 
     reloadFuncaoDoar() {
@@ -101,7 +113,7 @@ class Vender extends Component {
         return (
              <View style={[sty.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]}>
                 {this._loadDoar()}
-                <TouchableHighlight onPress={ () => false } underlayColor="transparent" style={{ paddingVertical: 10, paddingHorizontal:15, backgroundColor:'#2D3B49', borderRadius: 100, position:'absolute', bottom:5, right: 5}}>
+                <TouchableHighlight onPress={ () => Actions.AnunciarScreen() } underlayColor="transparent" style={{ paddingVertical: 10, paddingHorizontal:15, backgroundColor:'#2D3B49', borderRadius: 100, position:'absolute', bottom:5, right: 5}}>
                     <Icon name="md-add" size={25} color="#fff"/>    
                 </TouchableHighlight>
             </View>

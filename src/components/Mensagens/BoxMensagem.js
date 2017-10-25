@@ -21,7 +21,7 @@ export default class BoxMensagem extends Component {
                             </View>
                         </View>
                         <View style={{ flex: .3 }}></View>
-                        <View style={{ flex: 3, position: 'relative' }}>
+                        <View style={{ flex: 3, flexGrow:3, width:0, position: 'relative' }}>
                             <Text style={sty.titulo}>{this.props.item.titulo}</Text>
                             <Text style={sty.data}>{this.props.item.data}</Text>
                             <TouchableHighlight onPress={() => this.props.deleteMensagem(this.props.item.id)} underlayColor="transparent" style={{ position: 'absolute', top: 0, right: 0 }}>

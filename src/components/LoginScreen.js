@@ -37,8 +37,9 @@ class LoginScreen extends Component {
     }
 
     _validaLogin(perfil) {
-        var _this = this;
-        axios.post('http://liberapp.com.br/api/validaUser', { email: perfil.email, id: perfil.userId, one_signal_id: '' })
+        let _this = this;
+        let plat = (Platform.OS == 'ios') ? 'ios':'android';
+        axios.post('http://liberapp.com.br/api/validaUser', { email: perfil.email, id: perfil.userId, one_signal_id: '', platform: plat, foto: perfil.foto })
             .then(function (response) {
                 if (response.data.status == true) {
                     //esta cadastrado, entao joga pra index
@@ -46,6 +47,7 @@ class LoginScreen extends Component {
                     _this._initDataToStorage(newData, perfil, false);
                 } else {
                     //cadastra o usuario no sistema
+                    //alert(JSON.stringify(perfil));
                     _this._cadastraUser(perfil);
                 }
             })
@@ -65,17 +67,21 @@ class LoginScreen extends Component {
     }
 
     _cadastraUser(perfil) {
-        let dados = { nome: perfil.nome, email: perfil.email, id: perfil.userId, foto: perfil.foto, niver: '', id_onesignal: '' }
+        let _this = this;
+        let plat = (Platform.OS == 'ios') ? 'ios':'android';
+        let dados = { nome: perfil.nome, email: perfil.email, id: perfil.userId, foto: perfil.foto, niver: '', id_onesignal: '', platform: plat }
         axios.post('http://liberapp.com.br/api/cadUser', dados)
             .then(function (response) {
                 if (response.data.status == 0 || response.data.status == "0") {
                     let newData = {"server_cidade_id":"null", "server_cidade":"null", "server_foto": response.data.url_foto, "server_id": response.data.user_id, "user_pro": false, "logado": true };
                     _this._initDataToStorage(newData, perfil, true);
                 } else {
+                    console.log("Success:",response.data);
                     Alert.alert("Houve um erro ao lhe cadastrar no sistema. Tente mais tarde");
                 }
             })
             .catch(function (error) {
+                console.log("error: ",error);
                 Alert.alert("Houve um erro ao lhe cadastrar no sistema. Tente mais tarde");
             });
     }

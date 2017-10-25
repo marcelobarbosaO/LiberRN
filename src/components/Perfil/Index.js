@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, Platform, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, Platform, Image, Alert, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import axios from 'axios';
 
+import EditarPerfil from './EditarPerfil';
 import Loading from '../Outros/Loading';
 import ErrorNetwork from '../Outros/ErrorNetwork';
 
@@ -12,9 +13,9 @@ const userProfile = [];
 class Index extends Component {
     constructor(props) {
         super(props);
-        this.state = { loadData: false, dataProfile: [], errorNetwork: false };
+        this.state = { loadData: false, dataProfile: [], errorNetwork: false, visible: false };
         this.userProfile = JSON.parse(this.props.profile);
-        //alert(JSON.stringify(this.userProfile));
+        this.hideModal = this.hideModal.bind(this);
     }
 
     static contextTypes = { drawer: React.PropTypes.object }
@@ -121,12 +122,16 @@ class Index extends Component {
         }
     }
 
+    hideModal(){
+        this.setState({ visible: false });
+    }
+
     render() {
         return (
             <View style={est.boxGeral}>
                 <View style={est.ToolBar}>
                     <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: 1 }}>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>
@@ -141,17 +146,28 @@ class Index extends Component {
                     <Image source={require('../../imgs/bg_profile.jpg')} style={{ width: null, height: null, resizeMode: 'stretch' }}>
                         <View style={est.boxTopo}>
                             <View style={{ width: 150, height: 150, borderRadius: 100, borderWidth: 7, borderColor: "rgba(0,0,0,0.5)", overflow: 'hidden', padding: 0, margin: 0 }}>
-                                <Image source={{ uri: this.userProfile.foto, width: 150, height: 150 }} style={est.imgUser} />
+                                <Image source={{ uri: this.userProfile.server_response.server_foto, width: 150, height: 150 }} style={est.imgUser} />
                             </View>
-                            <Text style={est.nomeUser}>{ this.userProfile.nome }</Text>
-                            <Text style={ est.nomeCidade }>{ (this.userProfile.server_response.server_cidade != "null") ? this.userProfile.server_response.server_cidade:''}</Text>
-                            <TouchableHighlight onPress={ () => false } style={{ position:'absolute', bottom: 5, right:5, backgroundColor:'#FFF', paddingVertical: 5, paddingHorizontal:9, borderRadius: 100}} underlayColor="transparent">
+                            <View style={{ flexDirection:'row', alignItems:'center', marginTop:10 }}>
+                                <Icon name="ios-contact" color="#FFF" size={24} style={{ backgroundColor:'transparent', marginRight: 20, height:24 }} />
+                                <Text style={est.nomeUser}>{ this.userProfile.nome }</Text>
+                            </View>
+                            <View style={{ flexDirection:'row', alignItems:'center', marginTop:10 }}>
+                                <Icon name="ios-home" color="#FFF" size={24} style={{ backgroundColor:'transparent', marginRight: 20, height:24 }}/>
+                                <Text style={ est.nomeCidade }>{ (this.userProfile.server_response.server_cidade != "null") ? this.userProfile.server_response.server_cidade:'cadastrar cidade'}</Text>
+                            </View>
+                            <TouchableHighlight onPress={ () => this.setState({ visible:true }) } style={{ position:'absolute', bottom: 5, right:5, backgroundColor:'#FFF', paddingVertical: 5, paddingHorizontal:9, borderRadius: 100}} underlayColor="transparent">
                                 <Icon style={{ backgroundColor:'transparent'}} name="md-create" size={25} color="#424B54"/>
                             </TouchableHighlight>
                         </View>
                     </Image>
                     {this._loadBottomComponent()}
                 </View>
+                <Modal visible={ this.state.visible } transparent={true} onRequestClose={() => false} animationType="slide">
+                        <View style={{ flex: 1}}>
+                            <EditarPerfil hideModal={ this.hideModal }/>
+                        </View>
+                </Modal>
             </View>
         );
     }
@@ -168,8 +184,8 @@ const est = StyleSheet.create({
     content: { backgroundColor: '#eee', flex: 1 },
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { paddingVertical: 25, alignItems: "center" },
-    nomeUser: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 16 : 19, paddingTop: 10, fontFamily: 'OpenSans-ExtraBold' },
-    nomeCidade: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 14 : 16, paddingTop: 10, fontFamily: font },
+    nomeUser: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 16 : 19, fontFamily: 'OpenSans-ExtraBold' },
+    nomeCidade: { backgroundColor: 'transparent', color: '#FFF', fontSize: (Platform.OS === 'ios') ? 14 : 16, fontFamily: font },
     boxBottom: { marginVertical: 15, paddingHorizontal: 40, flex: 1, justifyContent: 'space-around' },
     imgIcon: { height: 35, width: 35, resizeMode: "center", marginRight: 20 },
     btn: { flex: 1 },

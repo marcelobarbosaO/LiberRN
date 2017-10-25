@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Image, AsyncStorage, Dimensions, Keyboard, TextInput } from 'react-native';
 import Drawer from 'react-native-drawer';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
 import { connect } from 'react-redux';
+import SearchBar from 'react-native-searchbar';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
 import TabBarHome from './Home/TabBarHome';
 import Vender from './Home/Vender';
@@ -14,8 +16,9 @@ import Menu from './Outros/Menu';
 import { logarFace } from '../actions/AppActions';
 
 class HomeScreen extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.search = this.search.bind(this);
     }
 
     state = {
@@ -26,16 +29,43 @@ class HomeScreen extends Component {
             { key: '3', title: 'Doar' },
             { key: '4', title: 'Parceiros' },
         ],
+        openSearch: false,
+        palavra: ''
     };
 
     _handleChangeTab = index => this.setState({ index });
-    _renderHeader = props => <TabBarHome {...props} />;
+    _renderHeader = props => <TabBarHome {...props} btnSearch={this.search} />;
     _renderScene = SceneMap({
         '1': Vender,
         '2': Trocar,
         '3': Doar,
         '4': Parceiros,
     });
+
+    search() {
+        this.setState({ openSearch: true});
+        this.searchBar.show();
+    }
+
+    _showBusca() {
+        if (this.state.openSearch) {
+            return (
+                <View style={styles.boxSearch}></View>
+            )
+        }
+    }
+
+    hideSearch(){
+        this.setState({ openSearch: false});
+        this.searchBar.hide();
+    }
+
+    _initSearch(){
+        if(this.state.palavra != ''){
+            this.hideSearch();
+            Actions.BuscaScreen({palavra: this.state.palavra});
+        }
+    }
 
     render() {
         return (
@@ -48,8 +78,8 @@ class HomeScreen extends Component {
                 panCloseMask={0.2}
                 tapToClose={true}
                 styles={DrawerStyle}
-                tweenHandler={ (ratio) => ({
-                    mainOverlay: { opacity:((ratio * 8)/10) }
+                tweenHandler={(ratio) => ({
+                    mainOverlay: { opacity: ((ratio * 8) / 10) }
                 })}
             >
                 <TabViewAnimated
@@ -59,6 +89,17 @@ class HomeScreen extends Component {
                     renderHeader={this._renderHeader}
                     onRequestChangeTab={this._handleChangeTab}
                 />
+                <SearchBar
+                    ref={(ref) => this.searchBar = ref}
+                    data={[]}
+                    placeholder="Digite o que procura"
+                    onSubmitEditing={ () => this._initSearch() }
+                    fontSize={ 16 }
+                    onBack={ () => this.hideSearch() }
+                    handleChangeText={ (texto) => this.setState({ palavra: texto} )}
+                    showOnLoad={false}
+                />
+                { this._showBusca() }
             </Drawer>
         );
     }
@@ -70,6 +111,16 @@ const DrawerStyle = {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    boxSearch: {
+        flex: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)'
     }
 });
 

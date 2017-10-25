@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, TouchableHighlight, Alert, Dimensions, Modal } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Platform, TouchableHighlight, Image, Alert, Dimensions, Modal } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import axios from 'axios';
-import Image from 'react-native-image-progress';
+import Imagee from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import Modall from 'react-native-modal'
 import { connect } from 'react-redux';
@@ -28,6 +28,16 @@ class AnuncioScreen extends Component {
 
     componentDidMount() {
         this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height });
+        this._moreView();
+    }
+    
+    _moreView(){
+        axios.post('http://liberapp.com.br/api/more_view_book',{ id: this.props.item.id})
+        .then( (response) => {
+
+        }).catch( (error) => {
+
+        })
     }
 
     _backHistory() {
@@ -62,13 +72,13 @@ class AnuncioScreen extends Component {
         if (this.props.item.user_foto == '') {
             return (
                 <View style={{ width: 30, height: 30, borderRadius: 40, padding: 0, margin: 0, overflow: 'hidden', borderWidth: 3, borderColor: "rgba(0,0,0,0.1)" }}>
-                    <Image source={require('../imgs/user_default.png')} style={{ margin: -3, width: 30, height: 30, borderWidth: (Platform.OS == 'ios') ? 0 : 2, borderRadius: (Platform.OS == 'ios') ? 0 : 40, borderColor: "rgba(0,0,0,0.1)" }} />
+                    <Imagee source={require('../imgs/user_default.png')} style={{ margin: -3, width: 30, height: 30, borderWidth: (Platform.OS == 'ios') ? 0 : 2, borderRadius: (Platform.OS == 'ios') ? 0 : 40, borderColor: "rgba(0,0,0,0.1)", position:'relative' }} />
                 </View>
             );
         } else {
             return (
-                <View style={{ width: 30, height: 30, borderRadius: 40, padding: 0, margin: 0, overflow: 'hidden', borderWidth: 3, borderColor: "rgba(0,0,0,0.1)", position: 'relative' }}>
-                    <Image source={{ uri: this.props.item.user_foto, width: 30, height: 30 }} style={{ margin: -3, borderWidth: (Platform.OS == 'ios') ? 0 : 2, borderRadius: (Platform.OS == 'ios') ? 0 : 40, borderColor: "rgba(0,0,0,0.1)" }} />
+                <View style={{ width: 30, height: 30, borderRadius: 40, padding: 0, margin: 0, overflow: 'hidden', borderWidth: 3, borderColor: "rgba(0,0,0,0.1)", position:'relative' }}>
+                    <Image source={{ uri: this.props.item.user_foto, width:30, height:30 }} style={{ margin: -3, borderWidth: (Platform.OS == 'ios') ? 0 : 2, borderRadius: (Platform.OS == 'ios') ? 0 : 40, borderColor: "rgba(0,0,0,0.1)", position:'relative' }} />
                 </View>
             );
         }
@@ -78,25 +88,29 @@ class AnuncioScreen extends Component {
         if (this.state.aba == 1) {
             return (
                 <View style={{ flex: 1, padding: 20 }}>
-                    <Text style={est.txtDet}>{this.props.item.descricao}</Text>
+                    <ScrollView>
+                        <Text style={est.txtDet}>{this.props.item.descricao}</Text>
+                    </ScrollView>
                 </View>
             )
         } else {
             if (this.state.listaImgs.length > 0) {
                 return (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {
-                            this.state.listaImgs.map((item) => {
-                                return (
-                                    <View style={{ width: (this.state.width / 3), marginTop: 10, alignItems: 'center' }} key={item.id}>
-                                        <TouchableHighlight onPress={() => this._loadImageView(item.url)}>
-                                            <Image indicator={Progress.Circle} indicatorProps={{ showsText: true }} source={{ uri: item.url, width: 70, height: 110 }} style={{ width: 70, height: 110, backgroundColor: '#eee' }} />
-                                        </TouchableHighlight>
-                                    </View>
-                                )
-                            })
-                        }
-                    </View>
+                    <ScrollView>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                            {
+                                this.state.listaImgs.map((item) => {
+                                    return (
+                                        <View style={{ width: (this.state.width / 3), marginTop: 10, alignItems: 'center' }} key={item.id}>
+                                            <TouchableHighlight onPress={() => this._loadImageView(item.url)}>
+                                                <Imagee indicator={Progress.Circle} indicatorProps={{ showsText: true }} source={{ uri: item.url, width: 70, height: 110 }} style={{ width: 70, height: 110, backgroundColor: '#eee' }} />
+                                            </TouchableHighlight>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>
+                    </ScrollView>
                 )
             } else {
                 return (
@@ -179,7 +193,7 @@ class AnuncioScreen extends Component {
                     </View>
                     <View style={{ flex: 1 }}></View>
                 </Modall>
-                <Modal visible={this.state.visible} transparent={true}>
+                <Modal visible={this.state.visible} transparent={true} onRequestClose={() => false}>
                     <View style={{ flex: .1, backgroundColor: 'rgba(0,0,0,1)', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                         <TouchableHighlight underlayColor="transparent" onPress={() => this.setState({ visible: false, images: [] })}>
                             <Text style={{ color: '#FFF', paddingBottom: 7 }}>Fechar</Text>
@@ -189,7 +203,7 @@ class AnuncioScreen extends Component {
                 </Modal>
                 <View style={est.ToolBar}>
                     <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: .3 }}>
-                        <View style={{ flex: .3 }}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
                     </TouchableHighlight>
@@ -207,8 +221,8 @@ class AnuncioScreen extends Component {
                     <View style={est.boxTopo}>
                         <Image source={require('../imgs/bg_anuncio.jpg')} style={{ flex: 1, resizeMode: 'stretch', width: null }}>
                             <View style={{ flex: 1, padding: 20, flexDirection: 'row', alignItems: 'center' }}>
-                                <Image indicator={Progress.Circle} indicatorProps={{ showsText: true }} source={{ uri: this.props.item.foto, width: 90, height: 130, }} style={{ width: 90, height: 130 }} />
-                                <View style={{ paddingLeft: 15 }}>
+                                <Imagee indicator={Progress.Circle} indicatorProps={{ showsText: true }} source={{ uri: this.props.item.foto, width: 90, height: 130, }} style={{ width: 90, height: 130 }} />
+                                <View style={{ paddingLeft: 15, flexGrow: 1, width:0 }}>
                                     <Text style={[est.trans, { color: '#FFF', fontSize: 16, marginBottom: 15, fontWeight: 'bold' }]}>{this.props.item.titulo}</Text>
                                     <Text style={[est.trans, { color: '#FFF', fontSize: 13, paddingBottom: 30 }]}>Postado: {this.props.item.data}</Text>
                                 </View>

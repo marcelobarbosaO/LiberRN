@@ -7,17 +7,17 @@ import BoxAnuncioDoar from './BoxAnuncioDoar';
 import Loading from '../Outros/Loading';
 import ErrorNetwork from '../Outros/ErrorNetwork';
 
-class Trocar extends Component {
+class Doar extends Component {
     constructor(props) {
         super(props);
         this.state = { refreshing:false, loading: true, data: [], errorNetWork: false, errorNumber: 0 };
-        this._loadItemsTrocar();
-        this.reloadFuncaoTrocar = this.reloadFuncaoTrocar.bind(this);
+        this._loadItemsDoar();
+        this.reloadFuncaoDoar = this.reloadFuncaoDoar.bind(this);
     }
 
-    _loadItemsTrocar() {
+    _loadItemsDoar() {
         let perf = JSON.parse(this.props.profile);
-        axios.post('http://liberapp.com.br/api/publicacoes', { id: perf.server_response.server_id, filtro: 2 })
+        axios.post('http://liberapp.com.br/api/busca', { id: perf.server_response.server_id, palavra: this.props.route.palavra, filtro: 1 })
             .then((response) => {
                 //remove o load e insere os dados no state
                 if (response.data.status == 0 || response.data.status == "0") {
@@ -34,7 +34,7 @@ class Trocar extends Component {
             });
     }
 
-    _loadTrocar() {
+    _loadDoar() {
         if (this.state.loading) {
             return (
                 <Loading />
@@ -42,7 +42,7 @@ class Trocar extends Component {
         } else {
             if (this.state.errorNetWork) {
                 return (
-                    <ErrorNetwork error={{ erro: this.state.errorNumber }} reloadFuncao={this.reloadFuncaoTrocar} />
+                    <ErrorNetwork error={{ erro: this.state.errorNumber }} reloadFuncao={this.reloadFuncaoDoar} />
                 )
             } else {
                 return (
@@ -63,20 +63,20 @@ class Trocar extends Component {
         }
     }
 
-    reloadFuncaoTrocar() {
+    reloadFuncaoDoar() {
         this.setState({ refreshing: true, loading: true, errorNetWork: false, errorNumber: 0 });
-        this._loadItemsTrocar();
+        this._loadItemsDoar();
     }
 
     _onRefresh() {
         this.setState({ refreshing: true, loading: true, errorNetWork: false, errorNumber: 0});
-        this._loadItemsTrocar();
+        this._loadItemsDoar();
     }
 
     render() {
         return (
              <View style={[sty.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]}>
-                {this._loadTrocar()}
+                {this._loadDoar()}
             </View>
         );
     }
@@ -90,4 +90,4 @@ const mapStateToProps = state => ({
     profile: state.AppReducer.profile
 });
 
-export default connect(mapStateToProps, {})(Trocar);
+export default connect(mapStateToProps, {})(Doar);

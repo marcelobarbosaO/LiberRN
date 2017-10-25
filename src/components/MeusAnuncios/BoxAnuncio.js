@@ -17,23 +17,23 @@ export default class BoxAnuncio extends Component {
                         </View>
                     </View>
                     <View style={{ flex: .3}}></View>
-                    <View style={{ flex: 3, position:'relative'}}>
+                    <View style={{ flex: 3, position:'relative', flexGrow: 3, width:0}}>
                         <Text style={ sty.titulo }>{ this.props.item.titulo }</Text>
                         <Text style={ sty.data }>postado: { this.props.item.data }</Text>
                         <View style={{ flexDirection: 'row', alignItems:'center'}}>
                             <Image source={ require('../../imgs/icones/views.png') } style={{ width:18, height: 18}}/>
                             <Text style={{marginLeft: 5}}>{ this.props.item.views }</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', alignItems:'center'}}>
+                        {/*<View style={{ flexDirection: 'row', alignItems:'center'}}>
                             <Image source={ require('../../imgs/icones/icon_heart_outline.png') } style={{ width:18, height: 18}}/>
                             <Text style={{marginLeft: 5}}>{ this.props.item.curtidas }</Text>
-                        </View>
+                        </View>*/}
                         <TouchableHighlight onPress={ () => this.props.deleteAnuncio(this.props.item.id) } underlayColor="transparent" style={{ position: 'absolute', bottom: 0, right:0 }}>
                             <Image source={ require('../../imgs/icones/delete.png') } style={{ width: 25, height: 25}}/>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={ () => false } underlayColor="transparent" style={{position: 'absolute', bottom: 0, right:40}}>
+                        {/*<TouchableHighlight onPress={ () => Actions.EditarAnuncioScreen({ item: this.props.item }) } underlayColor="transparent" style={{position: 'absolute', bottom: 0, right:40}}>
                             <Image source={ require('../../imgs/icones/edit.png') } style={{ width: 25, height: 25 }}/>
-                        </TouchableHighlight>
+                    </TouchableHighlight>*/}
                     </View>
                 </View>
             </View>

@@ -3,6 +3,8 @@ package com.liber;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.magus.fblogin.FacebookLoginPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
+            new PickerPackage(),
             new FacebookLoginPackage(),
             new VectorIconsPackage()
       );
