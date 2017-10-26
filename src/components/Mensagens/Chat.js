@@ -19,7 +19,7 @@ class Chat extends Component {
         nome = explode;
         this.userProfile = JSON.parse(this.props.profile);
 
-        this.state = { loadData: false, data: [], errorNetwork: false, errorNumber: 0, text: '', flexBottom: 1 };
+        this.state = { loadData: false, data: [], errorNetwork: false, errorNumber: 0, text: '', padBottom:0, flexBottom: 1 };
 
         this.reloadFuncaoChat = this.reloadFuncaoChat.bind(this);
 
@@ -28,20 +28,66 @@ class Chat extends Component {
 
     componentWillMount() {
         let self = this;
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            this.setState({ flexBottom: 2 });
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
+            this.setState({ flexBottom: 2, padBottom: (e.endCoordinates.height +20) });
             setTimeout(function () {
                 self.scroolFinal();
             }, 190);
         });
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            this.setState({ flexBottom: 1 });
+            this.setState({ flexBottom: 1, padBottom:0 });
         });
+    }
+
+    componentDidMount(){
+        let self = this;
+        this.intervalId = setInterval( () => {
+            self.checkNewMessages();
+        },3000);
+    }
+
+    checkNewMessages(){
+        let self = this;
+        axios.post('http://liberapp.com.br/api/msgs_chat', { user_id: this.userProfile.server_response.server_id, id_livro: (this.props.item.id) })
+            .then((response) => {
+                //remove o load e insere os dados no state
+                //alert(JSON.stringify(response));
+                if (response.data.status == 0 || response.data.status == "0") {
+                    this.setState({ loadData: true, data: response.data.msgs });
+                    if (this.state.loadData && this.state.data.length > 6) {
+                        this.timeoutt2 = setTimeout(function () {
+                            self.scroolFinal();
+                        }, 190);
+                    }
+                } else if (response.data.status == 1 || response.data.status == "1") {
+                    this.setState({ loadData: true });
+                } else {
+                    this.setState({ loadData: true });
+                    /*Alert.alert(
+                        'Ops...',
+                        'Houve um erro, ao recuperar suas mensagens. Tente novamente mais tarde.'
+                    );*/
+                }
+            }).catch((data) => {
+                if (data == 'Error: Network Error') {
+                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 2 });
+                    Alert.alert("Você está sem conexão com a internet.");
+                } else {
+                    this.setState({ loadData: true, errorNetwork: true, errorNumber: 0 });
+                    Alert.alert(
+                        'Ops...',
+                        'Houve um erro, ao recuperar suas mensagens. Tente novamente mais tarde.'
+                    );
+                }
+            });
     }
 
     componentWillUnmount() {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
+        clearInterval(this.intervalId);
+        clearTimeout(this.timeoutt);
+        clearTimeout(this.timeoutt2);
     }
 
     reloadFuncaoChat() {
@@ -66,7 +112,7 @@ class Chat extends Component {
                 if (response.data.status == 0 || response.data.status == "0") {
                     this.setState({ loadData: true, data: response.data.msgs });
                     if (this.state.loadData && this.state.data.length > 6) {
-                        setTimeout(function () {
+                        this.timeoutt = setTimeout(function () {
                             self.scroolFinal();
                         }, 190);
                     }
@@ -128,7 +174,7 @@ class Chat extends Component {
         if (this.state.loadData) {
             if (!this.state.errorNetwork) {
                 return (
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, paddingBottom: (Platform.OS == 'ios') ? this.state.padBottom:0 }}>
                         <View style={{ flex: 10, paddingTop: 10 }}>
                             <FlatList
                                 ref={(ref) => this.flatList = ref}

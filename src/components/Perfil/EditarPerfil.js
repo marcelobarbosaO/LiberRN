@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Image, Platform, TouchableHighlight, StyleSheet, TextInput, Alert, Modal } from 'react-native';
+import { ScrollView, View, Text, Image, Platform, TouchableHighlight, Picker, StyleSheet, TextInput, Alert, Modal } from 'react-native';
+import ModalPicker from 'react-native-modal-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import CPF_VALIDATOR from 'cpf_cnpj';
@@ -12,7 +13,7 @@ class EditarPerfil extends Component {
     constructor(props) {
         super(props);
         this.userProfile = JSON.parse(this.props.profile);
-        this.state = { botaoPress: '', nome: '', email: '', cpf: '', cidade_id: null, estado_id: null, cidade: '', estado: '', telefone: '', niver: '', loadProfile: false, visible: false };
+        this.state = { botaoPress: '', nome: '', email: '', cpf: '', cidade_id: null, estado_id: null, cidade: '', estado: '', telefone: '', niver: '', loadProfile: false, visible: false, lista_estados: [], lista_cidades: [] };
     }
 
     componentDidMount() {
@@ -32,12 +33,21 @@ class EditarPerfil extends Component {
                         estado_id: obj.estado_id,
                         estado: obj.estado
                     })
+                    if (obj.estado_id != '') {
+                        this.loadCidades(obj.estado_id);
+                    }
                 } else {
                     this.setState({ loadProfile: true });
                 }
             }).catch(err => {
                 this.setState({ loadProfile: true });
                 Alert.alert("err");
+            });
+
+        axios.get(URL_API + "lista_estados")
+            .then(resp => {
+                //alert(JSON.stringify(resp.data.estados))
+                this.setState({ lista_estados: resp.data.estados })
             });
     }
 
@@ -188,7 +198,7 @@ class EditarPerfil extends Component {
 
     updateProfile() {
         this.setState({ visible: true });
-        let obj = { id: this.userProfile.server_response.server_id, nome: this.state.nome, email: this.state.email, telefone: this.state.telefone, niver: this.state.niver, cpf: this.state.cpf };
+        let obj = { id: this.userProfile.server_response.server_id, nome: this.state.nome, email: this.state.email, telefone: this.state.telefone, niver: this.state.niver, cpf: this.state.cpf, cidade_id: this.state.cidade_id };
         axios.post(URL_API + 'update_profile_2', obj)
             .then(resp => {
                 this.setState({ visible: false });
@@ -215,14 +225,6 @@ class EditarPerfil extends Component {
             });
     }
 
-    openModalEstados(){
-
-    }
-
-    openModalCidades(){
-        
-    }
-
     _load_profile() {
         if (this.state.loadProfile) {
             return (
@@ -238,12 +240,14 @@ class EditarPerfil extends Component {
                         <TextInput
                             placeholder="Nome"
                             style={est.input}
+                            underlineColorAndroid="transparent"
                             onChangeText={text => this.setState({ nome: text })}
                             value={this.state.nome}
                         />
                         <TextInput
                             placeholder="E-mail"
                             style={est.input}
+                            underlineColorAndroid="transparent"
                             onChangeText={text => this.setState({ email: text })}
                             autoCapitalize={'none'}
                             autoCorrect={false}
@@ -253,6 +257,7 @@ class EditarPerfil extends Component {
                         <TextInput
                             placeholder="Telefone"
                             style={est.input}
+                            underlineColorAndroid="transparent"
                             autoCapitalize={'none'}
                             maxLength={15}
                             keyboardType={'numeric'}
@@ -264,6 +269,7 @@ class EditarPerfil extends Component {
                             placeholder="Nascimento"
                             autoCapitalize={'none'}
                             style={est.input}
+                            underlineColorAndroid="transparent"
                             maxLength={10}
                             keyboardType={'numeric'}
                             onKeyPress={(e) => this.botaoPress(e)}
@@ -274,20 +280,15 @@ class EditarPerfil extends Component {
                             placeholder="CPF"
                             autoCapitalize={'none'}
                             keyboardType={'numeric'}
+                            underlineColorAndroid="transparent"
                             style={est.input}
                             maxLength={14}
                             onKeyPress={(e) => this.botaoPress(e)}
                             onChangeText={(text) => this.makeCpf(text, 1)}
                             value={this.state.cpf}
                         />
-                        
-                        <TouchableHighlight style={est.inputBtn} underlayColor="#CCC" onPress={ () => this.openModalEstados() }>
-                            <Text style={ est.textBtn}>{ this.state.estado}</Text>
-                        </TouchableHighlight>
-                        
-                        <TouchableHighlight style={est.inputBtn}  underlayColor="#CCC" onPress={ () => this.openModalCidades() }>
-                            <Text style={ est.textBtn}>{ this.state.cidade}</Text>
-                        </TouchableHighlight>
+
+                        {this.show_pickers()}
 
                         <TouchableHighlight onPress={() => this.checkData()} style={{ backgroundColor: '#2B3845', alignItems: 'center', paddingHorizontal: 30, paddingVertical: 12, borderRadius: 4 }} underlayColor="#2B3845">
                             <Text style={{ color: '#FFF' }}>Atualizar Perfil</Text>
@@ -299,6 +300,80 @@ class EditarPerfil extends Component {
             return (
                 <View style={{ flex: 1 }}>
                     <Loading />
+                </View>
+            )
+        }
+    }
+
+    loadCidades(id) {
+        axios.get(URL_API + "cidades/" + id)
+            .then(resp => {
+                this.setState({ lista_cidades: resp.data.cidades });
+            });
+    }
+
+    show_pickers() {
+        if (Platform.OS == 'ios') {
+            return (
+                <View>
+                    <ModalPicker
+                        data={this.state.lista_estados}
+                        initValue={this.state.optChoiceTxt}
+                        onChange={(option) => { this.loadCidades(option.key); this.setState({ estado_id: option.key, estado: option.label }) }}>
+
+                        <TextInput
+                            style={est.input}
+                            editable={false}
+                            underlineColorAndroid="transparent"
+                            placeholder="Selecione um estado"
+                            value={this.state.estado} />
+
+                    </ModalPicker>
+
+                    <ModalPicker
+                        data={this.state.lista_cidades}
+                        initValue={this.state.cidade}
+                        onChange={(option) => { this.setState({ cidade_id: option.key, cidade: option.label }) }}>
+
+                        <TextInput
+                            style={est.input}
+                            editable={false}
+                            underlineColorAndroid="transparent"
+                            placeholder="Selecione uma cidade"
+                            value={this.state.cidade} />
+
+                    </ModalPicker>
+                </View>
+            )
+        } else {
+            return (
+                <View>
+                    <Picker
+                        style={est.inputBtn}
+                        selectedValue={this.state.estado}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ estado_id: itemIndex, estado: itemValue })}>
+                        <Picker.Item label="Escolha um estado" value="0" />
+                        {
+                            this.state.lista_estados.map((item) => {
+                                return (
+                                    <Picker.Item key={item.key} label={item.label} value={item.label} />
+                                )
+                            })
+                        }
+                    </Picker>
+                    <Picker
+                            style={est.inputBtn}
+                            selectedValue={this.state.cidade}
+                            onValueChange={(itemValue, itemIndex) => this.setState({ cidade_id: itemIndex, cidade: itemValue })}>
+                            <Picker.Item label="Escolha uma cidade" value="0" />
+                            {
+                                this.state.lista_cidades.map((item) => {
+                                    return (
+                                        <Picker.Item key={item.key} label={item.label} value={item.label} />
+                                    )
+                                })
+                            }
+                        </Picker>
                 </View>
             )
         }
@@ -323,7 +398,7 @@ class EditarPerfil extends Component {
                 <View style={est.content}>
                     {this._load_profile()}
                 </View>
-                <Modal visible={this.state.visible} transparent={true} onRequestClose={ () => false }>
+                <Modal visible={this.state.visible} transparent={true} onRequestClose={() => false}>
                     <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }}>
                         <Loading />
                     </View>
@@ -352,12 +427,12 @@ const est = StyleSheet.create({
     btn: { flex: 1 },
     input: {
         height: 40, marginBottom: 15, backgroundColor: "#CCC", borderWidth: 1, borderColor: "#000",
-        paddingHorizontal: (Platform.OS == 'ios') ? 15 : 12, fontSize:16, color:'#2B3845'
+        paddingHorizontal: (Platform.OS == 'ios') ? 15 : 12, fontSize: 16, color: '#2B3845'
     },
-    textBtn:{ fontSize:16, color:'#2B3845' },
+    textBtn: { fontSize: 16, color: '#2B3845' },
     inputBtn: {
         height: 40, marginBottom: 15, backgroundColor: "#CCC", borderWidth: 1, borderColor: "#000",
-        paddingHorizontal: (Platform.OS == 'ios') ? 15 : 12, justifyContent:'center'
+        paddingHorizontal: (Platform.OS == 'ios') ? 15 : 12, justifyContent: 'center'
     },
     itemText: {
         fontSize: 17,

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage, Dimensions, Keyboard, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, AsyncStorage, Dimensions, Keyboard, TextInput, Platform } from 'react-native';
 import Drawer from 'react-native-drawer';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 import SearchBar from 'react-native-searchbar';
 import { Actions, ActionConst } from 'react-native-router-flux';
+import OneSignal from 'react-native-onesignal';
 
 import TabBarHome from './Home/TabBarHome';
 import Vender from './Home/Vender';
@@ -19,6 +20,17 @@ class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.search = this.search.bind(this);
+    }
+
+    componentWillMount(){
+        OneSignal.addEventListener('received', this.onReceived);
+    }
+
+    onReceived(notification) {
+        //console.log("Notification received: ", notification);
+        if(Platform.OS == 'android'){
+            alert(JSON.stringify(notification));
+        }
     }
 
     state = {

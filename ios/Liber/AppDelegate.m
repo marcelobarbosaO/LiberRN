@@ -15,11 +15,17 @@
 
 @implementation AppDelegate
 
+@synthesize oneSignal = _oneSignal;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
+                                                         appId:@"ef9ae50b-3359-4835-a625-f43e48c4864d"
+                                                      settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone),kOSSettingsKeyAutoPrompt: @false}];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Liber"
