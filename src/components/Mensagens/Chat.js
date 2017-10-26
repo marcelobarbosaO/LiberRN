@@ -30,7 +30,7 @@ class Chat extends Component {
         let self = this;
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
             this.setState({ flexBottom: 2, padBottom: (e.endCoordinates.height +20) });
-            setTimeout(function () {
+            this.timeoutt3 = setTimeout(function () {
                 self.scroolFinal();
             }, 190);
         });
@@ -88,6 +88,7 @@ class Chat extends Component {
         clearInterval(this.intervalId);
         clearTimeout(this.timeoutt);
         clearTimeout(this.timeoutt2);
+        clearTimeout(this.timeoutt3);
     }
 
     reloadFuncaoChat() {

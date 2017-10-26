@@ -22,15 +22,33 @@ class HomeScreen extends Component {
         this.search = this.search.bind(this);
     }
 
-    componentWillMount(){
+    componentWillMount() {
+        if (Platform.OS == 'ios') {
+            OneSignal.checkPermissions((permissions) => {
+                //console.log(permissions);
+                permissions = {
+                    alert: true,
+                    badge: true,
+                    sound: true
+                };
+                OneSignal.requestPermissions(permissions);
+                OneSignal.registerForPushNotifications();
+                //OneSignal.addEventListener('opened', this.onOpened);
+            });
+        }
         OneSignal.addEventListener('received', this.onReceived);
     }
 
     onReceived(notification) {
-        //console.log("Notification received: ", notification);
-        if(Platform.OS == 'android'){
-            alert(JSON.stringify(notification));
-        }
+        Alert.alert(
+            notification.payload.title,
+            notification.payload.body,
+            [
+                { text: 'Fechar', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'Ver', onPress: () => Actions.MensagensScreen({ type: ActionConst.RESET }) },
+            ],
+            { cancelable: false }
+        )
     }
 
     state = {
@@ -55,7 +73,7 @@ class HomeScreen extends Component {
     });
 
     search() {
-        this.setState({ openSearch: true});
+        this.setState({ openSearch: true });
         this.searchBar.show();
     }
 
@@ -67,15 +85,15 @@ class HomeScreen extends Component {
         }
     }
 
-    hideSearch(){
-        this.setState({ openSearch: false});
+    hideSearch() {
+        this.setState({ openSearch: false });
         this.searchBar.hide();
     }
 
-    _initSearch(){
-        if(this.state.palavra != ''){
+    _initSearch() {
+        if (this.state.palavra != '') {
             this.hideSearch();
-            Actions.BuscaScreen({palavra: this.state.palavra});
+            Actions.BuscaScreen({ palavra: this.state.palavra });
         }
     }
 
@@ -105,13 +123,13 @@ class HomeScreen extends Component {
                     ref={(ref) => this.searchBar = ref}
                     data={[]}
                     placeholder="Digite o que procura"
-                    onSubmitEditing={ () => this._initSearch() }
-                    fontSize={ 16 }
-                    onBack={ () => this.hideSearch() }
-                    handleChangeText={ (texto) => this.setState({ palavra: texto} )}
+                    onSubmitEditing={() => this._initSearch()}
+                    fontSize={16}
+                    onBack={() => this.hideSearch()}
+                    handleChangeText={(texto) => this.setState({ palavra: texto })}
                     showOnLoad={false}
                 />
-                { this._showBusca() }
+                {this._showBusca()}
             </Drawer>
         );
     }

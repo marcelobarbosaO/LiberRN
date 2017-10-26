@@ -3,7 +3,7 @@ import { AppRegistry } from 'react-native';
 
 import App from './src/App';
 
-class Liber extends Component {
+class LiberApp extends Component {
 	render() {
 		return (
 			<App />
@@ -11,4 +11,4 @@ class Liber extends Component {
 	}
 }
 
-AppRegistry.registerComponent('Liber', () => Liber);
+AppRegistry.registerComponent('LiberApp', () =>LiberApp);
