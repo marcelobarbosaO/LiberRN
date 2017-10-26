@@ -148,7 +148,7 @@ class Vender extends Component {
             return (
                 <View>
                     <Picker
-                        style={est.inputBtn}
+                        style={sty.inputBtn}
                         selectedValue={this.state.estado}
                         onValueChange={(itemValue, itemIndex) => { this.loadCidades(option.key); this.setState({ estado_id: itemIndex, estado: itemValue }) }}>
                         <Picker.Item label="Escolha um estado" value="0" />
@@ -161,7 +161,7 @@ class Vender extends Component {
                         }
                     </Picker>
                     <Picker
-                        style={est.inputBtn}
+                        style={sty.inputBtn}
                         selectedValue={this.state.cidade}
                         onValueChange={(itemValue, itemIndex) => this.setState({ cidade_id: itemIndex, cidade: itemValue })}>
                         <Picker.Item label="Escolha uma cidade" value="0" />

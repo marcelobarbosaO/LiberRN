@@ -93,7 +93,7 @@ class Chat extends Component {
 
     reloadFuncaoChat() {
         this.setState({ loadData: true, errorNetWork: false, errorNumber: 0 });
-        this._loadItemsVenda();
+        this._loadMsgs();
     }
 
     _backHistory() {
@@ -217,11 +217,11 @@ class Chat extends Component {
         return (
             <View style={est.boxGeral}>
                 <View style={est.ToolBar}>
-                    <View style={{ flex: .3 }}>
-                        <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF">
+                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ paddingLeft:15, flex: .3}}>
+                        <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
-                        </TouchableHighlight>
-                    </View>
+                        </View>
+                    </TouchableHighlight>
                     <View style={{ flex: 1, alignItems: "center", overflow: 'hidden' }}>
                         <Text style={{ fontSize: (Platform.OS == 'ios') ? 15 : 17, color: '#2B3845', fontWeight: 'bold' }}>Chat com {nome}</Text>
                     </View>
@@ -243,7 +243,7 @@ else
     font = 'OpenSans-Regular';
 const est = StyleSheet.create({
     boxGeral: { flex: 1 },
-    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 15, backgroundColor: "#FFF" },
+    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFF" },
     content: { backgroundColor: '#eee', flex: 1 },
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { paddingVertical: 25, alignItems: "center" }

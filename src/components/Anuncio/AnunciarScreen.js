@@ -460,7 +460,7 @@ class Anunciar extends Component {
         return (
             <View style={[est.boxGeral]} >
                 <View style={est.ToolBar}>
-                    <TouchableHighlight onPress={() => { Actions.pop() }} underlayColor="#FFF" style={{ flex: .7 }}>
+                    <TouchableHighlight onPress={() => { Actions.pop() }} underlayColor="#FFF" style={{ flex: .7, paddingLeft:15 }}>
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
@@ -496,7 +496,7 @@ else
 
 const est = StyleSheet.create({
     boxGeral: { flex: 1, paddingBottom: 0, backgroundColor: '#eee' },
-    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 15, backgroundColor: "#FFF" },
+    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFF" },
     content: { backgroundColor: '#eee', flex: 1 },
     btnCancel: { position: 'absolute', bottom: 7, left: 7, paddingVertical: 9, paddingHorizontal: 15, backgroundColor: '#f00', borderRadius: 50 },
     btnConfirm: { position: 'absolute', bottom: 7, right: 7, paddingVertical: 9, paddingHorizontal: 15, backgroundColor: '#00cc00', borderRadius: 50 },

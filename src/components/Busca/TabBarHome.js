@@ -18,8 +18,8 @@ export default class TabBarHome extends Component {
             <View style={estilo.boxGeral}>
                 <StatusBar backgroundColor="#000" />
 
-                <View style={{ flexDirection: 'row', backgroundColor: '#FFF', justifyContent: 'space-between', paddingLeft: 15 }}>
-                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
+                <View style={{ flexDirection: 'row', backgroundColor: '#FFF', justifyContent: 'space-between' }}>
+                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center", paddingLeft:15 }}>
                         <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: "center" }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>

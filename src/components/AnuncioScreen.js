@@ -202,7 +202,7 @@ class AnuncioScreen extends Component {
                     <ImageViewer imageUrls={this.state.images} />
                 </Modal>
                 <View style={est.ToolBar}>
-                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: .3 }}>
+                    <TouchableHighlight onPress={() => { this._backHistory() }} underlayColor="#FFF" style={{ flex: .3, paddingLeft:15 }}>
                         <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-arrow-round-back" size={20} color="#2B3845" />
                         </View>
@@ -210,7 +210,7 @@ class AnuncioScreen extends Component {
                     <View style={{ flex: 1, alignItems: "center", overflow: 'hidden' }}>
 
                     </View>
-                    <View style={{ flex: 1, alignItems: "flex-end", justifyContent: 'flex-end' }}>
+                    <View style={{ flex: 1, alignItems: "flex-end", justifyContent: 'flex-end', paddingRight:15 }}>
                         <TouchableHighlight onPress={() => this.setState({ visibleModal: true })} underlayColor="transparent" style={{ paddingVertical: 0, paddingHorizontal: 0, backgroundColor: '#FFF', borderRadius: 100, borderWidth: 2, borderColor: '#2D3948', marginBottom: 3 }}>
                             <Image source={require('../imgs/icones/anunciar_dark.png')} style={{ width: 25, height: 25 }} />
                         </TouchableHighlight>
@@ -262,7 +262,7 @@ const est = StyleSheet.create({
     boxGeral: {
         flex: 1,
     },
-    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 15, backgroundColor: "#FFF" },
+    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFF" },
     content: { backgroundColor: '#eee', flex: 1 },
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { flex: .8, backgroundColor: '#FFF' },

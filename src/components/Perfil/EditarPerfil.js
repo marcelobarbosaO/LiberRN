@@ -351,7 +351,7 @@ class EditarPerfil extends Component {
                     <Picker
                         style={est.inputBtn}
                         selectedValue={this.state.estado}
-                        onValueChange={(itemValue, itemIndex) => this.setState({ estado_id: itemIndex, estado: itemValue })}>
+                        onValueChange={(itemValue, itemIndex) => { this.loadCidades(option.key); this.setState({ estado_id: itemIndex, estado: itemValue })} } >
                         <Picker.Item label="Escolha um estado" value="0" />
                         {
                             this.state.lista_estados.map((item) => {
@@ -383,7 +383,7 @@ class EditarPerfil extends Component {
         return (
             <View style={est.boxGeral}>
                 <View style={est.ToolBar}>
-                    <TouchableHighlight onPress={() => { this.props.hideModal() }} underlayColor="#FFF" style={{ flex: 1 }}>
+                    <TouchableHighlight onPress={() => { this.props.hideModal() }} underlayColor="#FFF" style={{ flex: 1, paddingLeft:15 }}>
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <Icon name="md-close" size={20} color="#2B3845" />
                         </View>
@@ -416,7 +416,7 @@ else
 
 const est = StyleSheet.create({
     boxGeral: { flex: 1 },
-    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 15, backgroundColor: "#FFF" },
+    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFF" },
     content: { backgroundColor: '#eee', flex: 1 },
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { paddingVertical: 15, alignItems: "center" },

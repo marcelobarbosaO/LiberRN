@@ -125,7 +125,7 @@ class Index extends Component {
         return(
             <View style={[est.boxGeral, { backgroundColor: (this.state.errorNetWork) ? '#fff':"#eee"}]} >
                 <View style={est.ToolBar}>
-                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ flex: .7 }}>
+                    <TouchableHighlight onPress={() => { this._openMenu() }} underlayColor="#FFF" style={{ paddingLeft:15, flex: .7 }}>
                         <View style={{ flex: 1, justifyContent:'center' }}>
                             <Icon name="md-menu" size={20} color="#2B3845" />
                         </View>
@@ -147,7 +147,7 @@ class Index extends Component {
 
 const est = StyleSheet.create({
     boxGeral:{ flex: 1, paddingBottom: 50},
-    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 15, backgroundColor: "#FFF" },
+    ToolBar: { paddingTop: (Platform.OS === 'ios') ? 20 : 0, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFF" },
     content: { backgroundColor: '#eee', flex: 1 },
     imgUser: { margin: -7, borderRadius: (Platform.OS == 'ios') ? 0 : 100, borderWidth: (Platform.OS == 'ios') ? 0 : 7, borderColor: "rgba(0,0,0,0.5)" },
     boxTopo: { paddingVertical: 25, alignItems: "center" },

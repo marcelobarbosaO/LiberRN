@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage, Dimensions, Keyboard, TextInput, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, AsyncStorage, Dimensions, Keyboard, TextInput, Platform, Alert } from 'react-native';
 import Drawer from 'react-native-drawer';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
 import { connect } from 'react-redux';
